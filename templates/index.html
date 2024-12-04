@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хранилище ключей</title>
+    <script>
+        async function handleRequest(endpoint, method, data) {
+            const response = await fetch(endpoint, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            alert(result.message || result.error);
+        }
+
+        function setKeyValue() {
+            const key = document.getElementById('key').value;
+            const value = document.getElementById('value').value;
+            handleRequest('/set', 'POST', { key, value });
+            document.getElementById('key').value = '';
+            document.getElementById('value').value = '';
+        }
+
+        function deleteKey() {
+            const key = document.getElementById('delete_key').value;
+            handleRequest(`/delete/${key}`, 'DELETE');
+            document.getElementById('delete_key').value = '';
+        }
+    </script>
+</head>
+<body>
+    <h1>Хранилище ключей</h1>
+
+    <section>
+        <h2>Добавить ключ-значение</h2>
+        <input type="text" id="key" placeholder="Ключ" required>
+        <input type="text" id="value" placeholder="Значение" required>
+        <button onclick="setKeyValue()">Добавить</button>
+    </section>
+
+    <section>
+        <h2>Удалить ключ</h2>
+        <input type="text" id="delete_key" placeholder="Ключ для удаления" required>
+        <button onclick="deleteKey()">Удалить</button>
+    </section>
+</body>
+</html>
